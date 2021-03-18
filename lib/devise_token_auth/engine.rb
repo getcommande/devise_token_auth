@@ -22,6 +22,7 @@ module DeviseTokenAuth
                  :redirect_whitelist,
                  :check_current_password_before_update,
                  :enable_standard_devise_support,
+                 :standard_devise_dont_create_new_client,
                  :remove_tokens_after_password_reset,
                  :default_callbacks,
                  :headers_names,
@@ -43,6 +44,7 @@ module DeviseTokenAuth
   self.redirect_whitelist                   = nil
   self.check_current_password_before_update = false
   self.enable_standard_devise_support       = false
+  self.standard_devise_dont_create_new_client = false
   self.remove_tokens_after_password_reset   = false
   self.default_callbacks                    = true
   self.headers_names                        = { 'access-token': 'access-token',
