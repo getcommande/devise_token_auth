@@ -15,6 +15,7 @@ module DeviseTokenAuth::Concerns::SetUserByToken
   def set_request_start
     @request_started_at = Time.zone.now
     @used_auth_by_token = true
+    @standard_devise_dont_create_new_client = false
 
     # initialize instance variables
     @token ||= DeviseTokenAuth::TokenFactory.new
@@ -58,6 +59,7 @@ module DeviseTokenAuth::Concerns::SetUserByToken
       devise_warden_user = warden.user(mapping)
       if devise_warden_user && devise_warden_user.tokens[@token.client].nil?
         @used_auth_by_token = false
+        @standard_devise_dont_create_new_client = true
         @resource = devise_warden_user
         # REVIEW: The following line _should_ be safe to remove;
         #  the generated token does not get used anywhere.
@@ -94,6 +96,10 @@ module DeviseTokenAuth::Concerns::SetUserByToken
   end
 
   def update_auth_header
+    if DeviseTokenAuth.standard_devise_dont_create_new_client && @standard_devise_dont_create_new_client
+      return
+    end
+
     # cannot save object if model has invalid params
     return unless @resource && @token.client
 
